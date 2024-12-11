@@ -255,6 +255,36 @@ app.get("/hotels/sort/:sorter",(req,res)=>{
   res.json({hotels:hotelsCopy})
 })
 
+function customFilter(hotels, key, order) {
+  return hotels.filter(hotel => {
+    return hotel[key].toLowerCase()===order})
+}
+
+app.get("/hotels/filter/:key",(req,res)=>{
+  let key = req.params.key
+  let logic;
+  switch(key){
+    case 'amenity':
+      logic = req.query.amenity
+      break
+    case 'country':
+      logic = req.query.country
+      break
+    case 'category':
+      logic = req.query.category
+      break
+    default:
+      break
+  }
+  let hotelsCopy = hotels.slice()
+  hotelsCopy = customFilter(hotelsCopy,key,logic);
+  res.json({hotels : hotelsCopy})
+})
+
+app.get("/hotels",(req,res)=>{
+  res.json({hotels : hotels})
+})
+
 // app.get('/', (req, res) => {
 //   res.sendFile(resolve(__dirname, 'pages/index.html'));
 // });
